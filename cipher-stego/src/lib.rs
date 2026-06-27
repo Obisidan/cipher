@@ -2,6 +2,7 @@
 //! Pure Rust, no external deps.
 
 pub mod bmp;
+pub mod exif;
 pub mod png;
 pub mod wav;
 
