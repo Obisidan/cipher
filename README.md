@@ -7,12 +7,6 @@
 [![Tests](https://img.shields.io/badge/tests-39%2F39-brightgreen.svg)]()
 [![Dependencies](https://img.shields.io/badge/deps-zero-red.svg)]()
 
-```text
-   ╔═╗╦╦ ╦╔═╗╦ ╦╔═╗╦═╗
-  ║   ║╠═╣║╣ ╠═╣║╣ ╠╦╝
-  ╚═╝╩╩ ╩╚═╝╩ ╩╚═╝╩╚═
-```
-
 ## Features
 
 ### Cryptography
