@@ -202,7 +202,7 @@ impl JpegExif {
         // TIFF header (little-endian)
         exif_data.extend_from_slice(&TIFF_LE);
         exif_data.extend_from_slice(&0x002A_u16.to_le_bytes()); // TIFF magic
-        exif_data.extend_from_slice(&8u32.to_le_bytes());       // First IFD offset
+        exif_data.extend_from_slice(&8u32.to_le_bytes()); // First IFD offset
 
         // IFD0 entries
         let entry_count = metadata.len() as u16;
@@ -293,7 +293,7 @@ impl JpegExif {
         data.push(0xC4);
         data.extend_from_slice(&31u16.to_be_bytes()); // Length
         data.push(0); // DC table, ID 0
-        // 16 bytes of code counts (all 0 except first)
+                      // 16 bytes of code counts (all 0 except first)
         data.extend_from_slice(&[0, 1, 5, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]);
         // 12 bytes of values
         data.extend_from_slice(&[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0xA, 0xB]);

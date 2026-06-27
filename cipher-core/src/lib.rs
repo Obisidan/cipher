@@ -7,6 +7,7 @@ pub mod aes;
 pub mod bytes;
 pub mod chacha20;
 pub mod constant_time;
+pub mod container;
 pub mod csprng;
 pub mod curve25519;
 pub mod encoding;
