@@ -1,0 +1,10 @@
+[package]
+name = "cipher-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+cipher-core = { path = "../cipher-core" }
+cipher-stego = { path = "../cipher-stego" }
