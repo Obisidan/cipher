@@ -1,146 +1,128 @@
-# CIPHER
+<div align="right">
+  <img src="assets/sayori-chibi.png" width="180" alt="Sayori Chibi" />
+</div>
 
-**Zero-dep Rust cryptography & steganography suite.**
+<h1 align="center">🔐 CIPHER</h1>
 
-[![Rust](https://img.shields.io/badge/rust-1.70%2B-orange.svg)](https://www.rust-lang.org/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-39%2F39-brightgreen.svg)]()
-[![Dependencies](https://img.shields.io/badge/deps-zero-red.svg)]()
+<p align="center">
+  <b>Zero-dep Rust cryptography & steganography suite</b><br/>
+  <i>if it needs to run bare, I write it myself</i>
+</p>
 
-## Features
+<p align="center">
+  <img src="https://img.shields.io/badge/rust-1.70%2B-orange?style=flat-square&logo=rust" />
+  <img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" />
+  <img src="https://img.shields.io/badge/tests-39%2F39-brightgreen?style=flat-square" />
+  <img src="https://img.shields.io/badge/deps-zero-red?style=flat-square" />
+</p>
+
+---
+
+<div align="center">
+
+  ![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&duration=3000&pause=800&color=FF69B4&center=true&vCenter=true&width=500&lines=AES-256-CTR+%2B+ChaCha20;SHA-256+%2B+HMAC+%2B+HKDF;LSB+Steganography;Encrypted+Containers;X25519+%2B+Ed25519)
+
+</div>
+
+---
+
+## 🕶️ What's good?
+
+**CIPHER** is a from-scratch cryptography & steganography toolkit in pure Rust. Zero external crypto dependencies. Every algorithm implemented directly from the RFC/spec — no OpenSSL, no `ring`, no `rust-crypto`. If it needs to run bare, I write it myself.
+
+---
+
+## 🔭 Arsenal in Production
+
+| Module | Description | Status |
+|--------|-------------|--------|
+| 🔒 **cipher-core** | AES-256-CTR, ChaCha20, SHA-256, HMAC, HKDF | ✅ Ship it |
+| 🖼️ **cipher-stego** | BMP/PNG/WAV LSB + JPEG EXIF manipulation | ✅ Ship it |
+| 📦 **Encrypted Container** | AES-256-CTR + HKDF + HMAC-SHA256 integrity | ✅ Ship it |
+| 🔑 **X25519/Ed25519** | Curve25519 ECDH + EdDSA signatures | 🚧 Core done |
+| 🖥️ **cipher-cli** | Sayori-themed terminal interface | 🚧 Scaffold |
+
+---
+
+## 🧠 Currently Building
+
+- 🦀 Poly1305 MAC (ChaCha20-Poly1305 AEAD)
+- 🔐 Full Ed25519 sign/verify
+- 📦 Hidden volume support (plausible deniability)
+- 🗺️ Hugo blog integration
+
+---
+
+## 🏆 Algorithms & Standards
 
 ### Cryptography
-| Algorithm   | Standard       | Status |
-|-------------|----------------|--------|
-| AES-256-CTR | FIPS-197       | ✅     |
-| ChaCha20    | RFC 8439       | ✅     |
-| SHA-256     | FIPS-180-4     | ✅     |
-| HMAC-SHA256 | RFC 2104       | ✅     |
-| HKDF-SHA256 | RFC 5869       | ✅     |
-| X25519      | RFC 7748       | 🚧     |
-| Ed25519     | RFC 8032       | 🚧     |
-| Poly1305    | RFC 8439       | ⏳     |
+| Algorithm | Standard | Status |
+|-----------|----------|--------|
+| AES-256-CTR | FIPS-197, SP800-38A | ✅ NIST vectors verified |
+| ChaCha20 | RFC 8439 | ✅ RFC vectors verified |
+| SHA-256 | FIPS-180-4 | ✅ NIST vectors verified |
+| HMAC-SHA256 | RFC 2104 | ✅ RFC vectors verified |
+| HKDF-SHA256 | RFC 5869 | ✅ RFC vectors verified |
+| X25519 | RFC 7748 | 🚧 Self-consistent |
+| Ed25519 | RFC 8032 | 🚧 Keygen done |
+| Poly1305 | RFC 8439 | ⏳ Planned |
 
 ### Steganography
-| Format | Type           | Status |
-|--------|----------------|--------|
-| BMP    | LSB embedding  | ✅     |
-| PNG    | LSB embedding  | ✅     |
-| WAV    | LSB embedding  | ✅     |
-| JPEG   | EXIF metadata  | ✅     |
+| Format | Method | Status |
+|--------|--------|--------|
+| BMP | LSB substitution | ✅ |
+| PNG | LSB in IDAT chunks | ✅ |
+| WAV | LSB in PCM samples | ✅ |
+| JPEG | EXIF metadata injection | ✅ |
 
-### Encrypted Container
-- AES-256-CTR encryption with HKDF-SHA256 key derivation
-- HMAC-SHA256 integrity verification
-- Tamper detection
+---
 
-## Architecture
+## 📊 Project Stats
 
-```
-cipher/
-├── cipher-core/       # Core cryptographic primitives (no_std-compatible)
-│   ├── aes.rs         #   AES-256-CTR
-│   ├── chacha20.rs    #   ChaCha20 stream cipher
-│   ├── sha256.rs      #   SHA-256 hash
-│   ├── hkdf.rs        #   HMAC-SHA256 + HKDF-SHA256
-│   ├── curve25519.rs  #   X25519 + Ed25519
-│   ├── container.rs   #   Encrypted container format
-│   ├── encoding.rs    #   Hex/Base64
-│   ├── csprng.rs      #   CSPRNG
-│   ├── constant_time.rs #  Constant-time operations
-│   └── bytes.rs       #   Low-level byte utilities
-├── cipher-stego/      # Steganography toolkit
-│   ├── bmp.rs         #   BMP LSB steganography
-│   ├── png.rs         #   PNG LSB steganography
-│   ├── wav.rs         #   WAV LSB steganography
-│   ├── exif.rs        #   JPEG EXIF manipulation
-│   └── lib.rs         #   Core LSB + entropy analysis
-├── cipher-cli/        # Command-line interface
-│   └── main.rs        #   CLI entry point
-└── Cargo.toml         # Workspace manifest
-```
+<div align="center">
 
-## Usage
+  ![CIPHER Tests](https://img.shields.io/badge/tests-39%2F39+passing-brightgreen?style=for-the-badge)
+  ![Lines of Code](https://img.shields.io/badge/LOC-~4000-blue?style=for-the-badge)
+  ![Crates](https://img.shields.io/badge/workspace-3+crates-orange?style=for-the-badge)
 
-### As a Library
+</div>
 
-```toml
-[dependencies]
-cipher-core = { git = "https://github.com/Obisidian/cipher" }
-```
+---
 
-```rust
-use cipher_core::{aes::Aes256Ctr, sha256::sha256, hkdf::hkdf_sha256};
-use cipher_core::csprng::random_array;
+## 🐍 Contribution Snake
 
-// AES-256-CTR encryption
-let key = random_array::<32>().unwrap();
-let iv = random_array::<16>().unwrap();
-let mut cipher = Aes256Ctr::new(&key, &iv);
-let plaintext = b"Hello, world!";
-let ciphertext = cipher.encrypt(plaintext);
-let decrypted = cipher.decrypt(&ciphertext);
-assert_eq!(decrypted, plaintext);
+<div align="center">
 
-// SHA-256 hashing
-let hash = sha256(b"Hello, world!");
-println!("{:x}", hash);
+  ![Snake animation](https://github.com/Obisidan/Obisidan/blob/output/github-contribution-grid-snake.svg)
 
-// HKDF key derivation
-let key_material = hkdf_sha256(b"salt", b"input key", b"info", 32).unwrap();
-```
+  <sub><i>The snake auto-generates daily via GitHub Actions.</i></sub>
 
-### Encrypted Container
+</div>
 
-```rust
-use cipher_core::container::Container;
+---
 
-// Encrypt
-let container = Container::encrypt(b"my password", b"secret data").unwrap();
-let bytes = container.to_bytes();
+## 🧰 Tech Stack & Tools
 
-// Decrypt
-let parsed = Container::from_bytes(&bytes).unwrap();
-let data = parsed.decrypt(b"my password").unwrap();
-```
+<p align="center">
+  <img src="https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white" />
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
+  <img src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black" />
+  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" />
+  <img src="https://img.shields.io/badge/Neovim-57A143?style=for-the-badge&logo=neovim&logoColor=white" />
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" />
+  <img src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white" />
+</p>
 
-### Steganography
+---
 
-```rust
-use cipher_stego::{lsb_embed, lsb_extract, detect_lsb_stego};
+## 📜 License
 
-let mut carrier = vec![0xFFu8; 1000];
-let payload = b"hidden message";
+MIT — do whatever you want, just don't blame me.
 
-lsb_embed(&mut carrier, payload).unwrap();
-let extracted = lsb_extract(&carrier, payload.len());
+---
 
-// Detect steganography
-let score = detect_lsb_stego(&carrier);
-```
+<div align="center">
 
-## Design Principles
+  🌸 **CIPHER** — *hehe i make stuffz* 🌸
 
-- **Zero external crypto dependencies** — all algorithms implemented from scratch from RFC/spec
-- **Constant-time operations** — prevents timing side-channel attacks
-- **Pure Rust** — no unsafe code, no C dependencies
-- **no_std compatible core** — `cipher-core` can run in embedded environments
-
-## Testing
-
-```bash
-cargo test --workspace
-```
-
-39 tests covering:
-- NIST AES test vectors
-- RFC 8439 ChaCha20 test vectors
-- NIST SHA-256 test vectors
-- RFC 5869 HKDF test vectors
-- Roundtrip tests for all ciphers
-- Container encryption/decryption/tamper detection
-- Steganography embed/extract for BMP/PNG/WAV
-
-## License
-
-MIT License — see [LICENSE](LICENSE).
+</div>
