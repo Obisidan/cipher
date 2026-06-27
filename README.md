@@ -40,16 +40,6 @@
 | 🖼️ **cipher-stego** | BMP/PNG/WAV LSB + JPEG EXIF manipulation | ✅ Ship it |
 | 📦 **Encrypted Container** | AES-256-CTR + HKDF + HMAC-SHA256 integrity | ✅ Ship it |
 | 🔑 **X25519/Ed25519** | Curve25519 ECDH + EdDSA signatures | 🚧 Core done |
-| 🖥️ **cipher-cli** | Sayori-themed terminal interface | 🚧 Scaffold |
-
----
-
-## 🧠 Currently Building
-
-- 🦀 Poly1305 MAC (ChaCha20-Poly1305 AEAD)
-- 🔐 Full Ed25519 sign/verify
-- 📦 Hidden volume support (plausible deniability)
-- 🗺️ Hugo blog integration
 
 ---
 
