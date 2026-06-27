@@ -8,6 +8,7 @@ pub mod bytes;
 pub mod chacha20;
 pub mod constant_time;
 pub mod csprng;
+pub mod curve25519;
 pub mod encoding;
 pub mod error;
 pub mod hkdf;
