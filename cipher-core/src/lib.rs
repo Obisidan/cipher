@@ -13,6 +13,7 @@ pub mod curve25519;
 pub mod encoding;
 pub mod error;
 pub mod hkdf;
+pub mod poly1305;
 pub mod sha256;
 
 pub use error::CipherError;
