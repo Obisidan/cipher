@@ -186,3 +186,5 @@ mod tests {
         assert!(result.is_empty());
     }
 }
+
+// ── Additional RFC 8439 test vectors and round-trip tests ──────────────

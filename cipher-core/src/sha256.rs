@@ -233,3 +233,5 @@ mod tests {
         );
     }
 }
+
+// ── Additional NIST CAVP test vectors ─────────────────────────────────

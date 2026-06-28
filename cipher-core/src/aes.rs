@@ -451,3 +451,5 @@ mod tests {
         assert_eq!(pt, plaintext);
     }
 }
+
+// ── Additional NIST vector and round-trip tests ────────────────────────

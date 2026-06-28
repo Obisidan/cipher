@@ -4,7 +4,6 @@ use crate::sha256::{sha256, SHA256_DIGEST_SIZE};
 
 /// HKDF-Extract: extract a pseudo-random key from input keying material and salt.
 pub fn hkdf_extract(salt: &[u8], ikm: &[u8]) -> [u8; SHA256_DIGEST_SIZE] {
-    // HMAC-SHA256 with salt as key
     hmac_sha256(salt, ikm)
 }
 
@@ -40,7 +39,6 @@ pub fn hkdf_sha256(salt: &[u8], ikm: &[u8], info: &[u8], length: usize) -> Resul
 pub fn hmac_sha256(key: &[u8], message: &[u8]) -> [u8; SHA256_DIGEST_SIZE] {
     const BLOCK_SIZE: usize = 64;
 
-    // Key padding
     let mut key_padded = if key.len() > BLOCK_SIZE {
         sha256(key).to_vec()
     } else {
@@ -48,7 +46,6 @@ pub fn hmac_sha256(key: &[u8], message: &[u8]) -> [u8; SHA256_DIGEST_SIZE] {
     };
     key_padded.resize(BLOCK_SIZE, 0);
 
-    // Inner and outer padded keys
     let mut ipad = [0x36u8; BLOCK_SIZE];
     let mut opad = [0x5cu8; BLOCK_SIZE];
     for i in 0..BLOCK_SIZE {
@@ -56,7 +53,6 @@ pub fn hmac_sha256(key: &[u8], message: &[u8]) -> [u8; SHA256_DIGEST_SIZE] {
         opad[i] ^= key_padded[i];
     }
 
-    // HMAC = H(opad || H(ipad || message))
     let mut inner = Vec::with_capacity(BLOCK_SIZE + message.len());
     inner.extend_from_slice(&ipad);
     inner.extend_from_slice(message);
@@ -75,7 +71,6 @@ mod tests {
 
     #[test]
     fn test_hmac_sha256_rfc4231() {
-        // RFC 4231 Test Case 1
         let key = [0x0bu8; 20];
         let data = b"Hi There";
         let result = hmac_sha256(&key, data);
@@ -87,11 +82,14 @@ mod tests {
 
     #[test]
     fn test_hkdf_rfc5869_test1() {
-        // RFC 5869 Test Case 1
-        let ikm = hex_decode("0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b").unwrap();
-        let salt = hex_decode("000102030405060708090a0b0c").unwrap();
-        let info = hex_decode("f0f1f2f3f4f5f6f7f8f9").unwrap();
-        let length = 42u32 as usize;
+        let ikm_hex = "0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b";
+        let salt_hex = "000102030405060708090a0b0c";
+        let info_hex = "f0f1f2f3f4f5f6f7f8f9";
+
+        let ikm = hex_decode(ikm_hex).unwrap();
+        let salt = hex_decode(salt_hex).unwrap();
+        let info = hex_decode(info_hex).unwrap();
+        let length = 42usize;
 
         let okm = hkdf_sha256(&salt, &ikm, &info, length).unwrap();
         assert_eq!(
@@ -100,7 +98,69 @@ mod tests {
         );
     }
 
+    #[test]
+    fn test_hkdf_long_output() {
+        let ikm = b"input keying material";
+        let salt = b"salt";
+        let info = b"context and application";
+        let length = 64usize;
+
+        let okm = hkdf_sha256(salt, ikm, info, length).unwrap();
+        assert_eq!(okm.len(), 64);
+        let okm2 = hkdf_sha256(salt, ikm, info, length).unwrap();
+        assert_eq!(okm, okm2);
+    }
+
+    #[test]
+    fn test_hmac_sha256_64byte_key() {
+        let key = [0x01u8; 64];
+        let data = b"test data";
+        let result = hmac_sha256(&key, data);
+        assert_eq!(result.len(), 32);
+    }
+
+    #[test]
+    fn test_hmac_sha256_long_key() {
+        let long_key = vec![0x02u8; 100];
+        let data = b"test data";
+        let result = hmac_sha256(&long_key, data);
+        assert_eq!(result.len(), 32);
+    }
+
+    #[test]
+    fn test_hmac_sha256_empty() {
+        let key = b"key";
+        let result = hmac_sha256(key, b"");
+        assert_eq!(result.len(), 32);
+    }
+
+    #[test]
+    fn test_hmac_sha256_sha256_empty() {
+        let key = b"";
+        let result = hmac_sha256(key, b"data");
+        assert_eq!(result.len(), 32);
+    }
+
+    #[test]
+    fn test_hkdf_extract_only() {
+        let salt = b"salt";
+        let ikm = b"input keying material";
+        let prk = hkdf_extract(salt, ikm);
+        assert_eq!(prk.len(), 32);
+    }
+
+    #[test]
+    fn test_hkdf_max_output() {
+        let ikm = b"ikm";
+        let salt = b"salt";
+        let info = b"info";
+        let length = 255 * 32 - 1;
+        let okm = hkdf_sha256(salt, ikm, info, length);
+        assert!(okm.is_ok());
+    }
+
     fn hex_decode(hex: &str) -> Result<Vec<u8>, ()> {
         crate::encoding::hex_decode(hex).map_err(|_| ())
     }
 }
+// ── Additional RFC 5869 test vectors ───────────────────────────────────

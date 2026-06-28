@@ -12,7 +12,7 @@
 use crate::aes::{Aes256Ctr, AES_256_KEY_SIZE};
 use crate::error::CipherError;
 use crate::hkdf::hkdf_sha256;
-use crate::sha256::{sha256, SHA256_DIGEST_SIZE};
+use crate::sha256::SHA256_DIGEST_SIZE;
 
 const CIPHER_MAGIC: &[u8; 8] = b"CIPHER01";
 const CONTAINER_VERSION: u8 = 1;

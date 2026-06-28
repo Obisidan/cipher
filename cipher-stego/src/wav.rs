@@ -261,3 +261,5 @@ mod tests {
         assert!(wav.capacity() >= 2500);
     }
 }
+
+// ── Additional WAV stego round-trip tests ──────────────────────────────

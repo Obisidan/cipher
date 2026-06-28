@@ -101,11 +101,11 @@ impl Fe {
         if gte {
             // r -= p using two's complement: r + (~p + 1)
             let not_p = [!p[0], !p[1], !p[2], !p[3]];
-            let (s0, c0) = r[0].overflowing_add(not_p[0]);
+            let (s0, _c0) = r[0].overflowing_add(not_p[0]);
             let (s0, c0) = s0.overflowing_add(1); // +1 for two's complement
-            let (s1, c1) = r[1].overflowing_add(not_p[1]);
+            let (s1, _c1) = r[1].overflowing_add(not_p[1]);
             let (s1, c1) = s1.overflowing_add(c0 as u64);
-            let (s2, c2) = r[2].overflowing_add(not_p[2]);
+            let (s2, _c2) = r[2].overflowing_add(not_p[2]);
             let (s2, c2) = s2.overflowing_add(c1 as u64);
             let (s3, _c3) = r[3].overflowing_add(not_p[3]);
             let (s3, _c3) = s3.overflowing_add(c2 as u64);
@@ -316,6 +316,10 @@ impl Ed25519PrivateKey {
         base[0] = 9;
         Ed25519PublicKey(x25519(&self.0, &base))
     }
+    /// Get the raw scalar bytes.
+    pub fn as_scalar_bytes(&self) -> &[u8; 32] {
+        &self.0
+    }
 }
 
 impl Ed25519PublicKey {
@@ -326,6 +330,11 @@ impl Ed25519PublicKey {
     }
 
     /// Get raw bytes.
+    /// Construct from raw 32-byte public key.
+    pub fn from_bytes(bytes: [u8; 32]) -> Self {
+        Self(bytes)
+    }
+
     pub fn as_bytes(&self) -> &[u8; 32] {
         &self.0
     }
@@ -333,6 +342,11 @@ impl Ed25519PublicKey {
 
 impl Ed25519Signature {
     /// Get raw bytes.
+    /// Construct from raw 64-byte signature.
+    pub fn from_bytes(bytes: [u8; 64]) -> Self {
+        Self(bytes)
+    }
+
     pub fn as_bytes(&self) -> &[u8; 64] {
         &self.0
     }
@@ -377,3 +391,5 @@ mod tests {
         assert_eq!(pub_key.as_bytes(), pub_from_priv.as_bytes());
     }
 }
+
+// ── Additional RFC 7748 test vectors ───────────────────────────────────

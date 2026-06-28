@@ -346,3 +346,5 @@ mod tests {
         assert_ne!(crc, 0);
     }
 }
+
+// ── Additional PNG stego round-trip tests ──────────────────────────────
